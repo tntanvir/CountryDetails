@@ -1,24 +1,19 @@
-// import logo from './logo.svg';
-import './App.css';
-import Country from './Component/Country';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
-import CountryDetail from './Component/CountryDetail';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import CountryList from "./Component/CountryList";
+import CountryDetail from "./Component/CountryDetail";
+
 function App() {
   return (
-    <div className="App">
+    <div className="app">
+      <h1 className="title">Countries</h1>
       <Router>
         <Routes>
-          <Route exact path="/" element={<Country />} />
-          <Route exact path="/country" element={<Country />} />
-          <Route exact path="/country/:CountryName" element={<CountryDetail />} />
-          {/* <Route exact path="*" element={<Notfound />} /> */}
+          <Route exact path="/" element={<CountryList />} />
+          <Route exact path="/country" element={<CountryList />} />
+          <Route exact path="/country/:name" element={<CountryDetail />} />
         </Routes>
       </Router>
-
     </div>
   );
 }

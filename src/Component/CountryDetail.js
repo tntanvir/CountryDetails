@@ -1,40 +1,52 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 const CountryDetail = () => {
-    const [Country, setCountry] = useState({})
-    const [Name, setName] = useState();
-    const [Flag, setFlag] = useState()
-    const { CountryName } = useParams()
-    // console.log(CountryName);
+  const { name } = useParams();
 
-    useEffect(() => {
-        async function data() {
-            try {
-                const dataCountry = await axios.get(`https://restcountries.com/v3.1/name/${CountryName}`);
-                console.log(dataCountry.data[0].flags.png);
-                setCountry(dataCountry.data[0])
-                setName(dataCountry.data[0]["name"]["common"])
-                setFlag(dataCountry.data[0]["flags"]["png"])
-                // setRegion(dataCountry.data[0].region)
-                console.log(dataCountry.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        data();
-    }, []);
-    return (
-        <div>
-            {console.log(Name, Flag)}
-            <h1>Country: {Name}</h1>
-            <img src={Flag} alt="Flag" />
-            <li>Area:{Country.area}</li>
-            <li>Region:{Country.region}</li>
-            <li>Population:{Country.population}</li>
-        </div>
-    );
+  const [country, setCountry] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    async function data() {
+      try {
+        const countries = await axios.get(
+          `https://restcountries.com/v3.1/name/${name}`
+        );
+        setCountry(countries.data[0]);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    data();
+  }, []);
+
+  return loading ? (
+    <h1>Loading...</h1>
+  ) : (
+    <div className="country">
+      <img src={country.flags?.png} alt={country.name.common} />
+      <h2>{country.name.common}</h2>
+      <p>
+        <b>Area: </b>
+        {country.area}
+      </p>
+      <p>
+        <b>Region: </b>
+        {country.region}
+      </p>
+      <p>
+        <b>Population: </b>
+        {country.population}
+      </p>
+      <Link to="/country">
+        <button style={{ padding: ".7rem 1.4rem" }}>Go Back</button>
+      </Link>
+    </div>
+  );
 };
 
-export default CountryDetail
+export default CountryDetail;
